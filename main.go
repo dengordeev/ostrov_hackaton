@@ -103,12 +103,14 @@ func main() {
 			"users": users,
 		})
 	})
-	r.POST("/users/add", func(c *gin.Context) {
+	r.PUT("/users", func(c *gin.Context) {
 		user := &User{}
 		err := c.BindJSON(&user)
+		log.Println(user)
 		if err != nil {
 			log.Println(err)
 			c.JSON(http.StatusBadRequest, nil)
+			return
 		}
 		user.ID = len(users) + 1
 		users = append(users, user)
