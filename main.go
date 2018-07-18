@@ -111,6 +111,9 @@ func main() {
 		})
 	})
 
+	r.POST("/user/:id", func(c *gin.Context) {
+
+	})
 	r.POST("/projects/add", func(c *gin.Context) {
 		project := &Project{}
 
