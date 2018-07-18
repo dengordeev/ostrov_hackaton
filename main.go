@@ -193,7 +193,26 @@ func main() {
 		c.JSON(http.StatusOK, nil)
 	})
 
-	r.POST("/project/join", func(c *gin.Context) {
+	r.POST("/project/:id/join/*idRole", func(c *gin.Context) {
+		id, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			c.JSON(http.StatusBadRequest, nil)
+			return
+		}
+		idRole, err := strconv.Atoi(c.Param("idRole"))
+		if err != nil {
+			c.JSON(http.StatusBadRequest, nil)
+			return
+		}
+
+		for _, p := range projects {
+			if p.ID == id {
+				ru := &RoleUser{}
+				p.Part = append(p.Part, ru)
+
+				return
+			}
+		}
 
 	})
 
