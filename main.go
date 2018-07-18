@@ -85,9 +85,10 @@ func save() {
 }
 
 var (
-	users     = []*User{}
-	projects  = []*Project{}
-	templates = []*Template{}
+	users      = []*User{}
+	projects   = []*Project{}
+	templates  = []*Template{}
+	rolesUsers = []*RoleUser{}
 )
 
 func findTeamLeaders(users []*User) []*User {
@@ -213,6 +214,7 @@ func main() {
 				ru := &RoleUser{
 					IDRole: idRole,
 					IDUser: IDUSER,
+					ID:     len(rolesUsers) + 1,
 				}
 				p.Part = append(p.Part, ru)
 
@@ -220,6 +222,7 @@ func main() {
 			}
 		}
 
+		return
 	})
 
 	r.GET("/users", func(c *gin.Context) {
