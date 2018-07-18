@@ -1,12 +1,18 @@
 package main
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+)
+
+const (
+	templateStore = "./db/template.json"
 )
 
 //User - структура, содержащая данные о пользователе
@@ -47,9 +53,23 @@ type Template struct {
 	VideoList     []string `json:"videoList"`
 	CourseLink    string   `json:"courseLink"`
 	Roles         []*Role  `json:"roles"`
-	Additional    []string `json:"additional"`
-	Resources     []string `json:"resources"`
-	ProjectsCount int      `json:"projectCount"`
+	Additional    []string `json:"additional"`   //материалы
+	Resources     []string `json:"resources"`    //ресурсы
+	ProjectsCount int      `json:"projectCount"` //количество успешных проектов
+}
+
+func save() {
+	str, err := json.Marshal(&templates)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	err = ioutil.WriteFile(templateStore, str, 0644)
+	if err != nil {
+		log.Println(err)
+		return
+	}
 }
 
 var (
@@ -127,8 +147,11 @@ func main() {
 			})
 			return
 		}
-
-		template.ID = templates[len(templates)-1].ID + 1
+		if len(templates) == 0 {
+			template.ID = 1
+		} else {
+			template.ID = templates[len(templates)-1].ID + 1
+		}
 
 		templates = append(templates, template)
 	})
