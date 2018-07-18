@@ -28,11 +28,32 @@ type Project struct {
 	Template `json:"template"`
 }
 
+//Role - структура, показывающая данные о ролях в проекте
+type Role struct {
+	ID    int    `json:"id"`
+	Name  string `json:"name"`
+	About string `json:"about"`
+}
+
+//Template - структура шаблона
+type Template struct {
+	ID            int      `json:"id"`
+	Name          string   `json:"name"`
+	Description   string   `json:"description"`
+	AuthorID      int      `json:"authorId"`
+	AuthorInfo    string   `json:"authorInfo"`
+	VideoList     []string `json:"videoList"`
+	CourseLink    string   `json:"courseLink"`
+	Roles         []*Role  `json:"roles"`
+	Additional    []string `json:"additional"`
+	Resources     []string `json:"resources"`
+	ProjectsCount int      `json:"projectCount"`
+}
 
 var (
-	templates = []*Template
-	users    = []*User{}
-	projects = []*Project{}
+	users     = []*User{}
+	projects  = []*Project{}
+	templates = []*Template{}
 )
 
 func findTeamLeaders(users []*User) []*User {
@@ -46,16 +67,11 @@ func findTeamLeaders(users []*User) []*User {
 	return result
 }
 
-func listTemplates() []*Template {
-
-}
 func main() {
 	r := gin.Default()
 
 	r.Static("/app", "./static")
 
-	projects = append(projects, p1)
-	users = append(users, u1, u2)
 	r.GET("/projects", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"projects": projects,
@@ -101,6 +117,7 @@ func main() {
 	r.PUT("/templates", func(c *gin.Context) {
 		template := &Template{}
 
+		log.Println(template)
 		err := c.BindJSON(&template)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, nil)
@@ -110,6 +127,12 @@ func main() {
 		template.ID = len(templates) + 1
 
 		templates = append(templates, template)
+	})
+
+	r.POST("/templates", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"templates": templates,
+		})
 	})
 	r.Run() // listen and serve on 0.0.0.0:8080
 }
