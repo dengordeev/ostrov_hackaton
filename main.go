@@ -27,6 +27,20 @@ type Project struct {
 	Part   []*User `json:"party"`
 }
 
+type Template struct {
+	ID            int      `json:"id"`
+	Name          string   `json:"name"`
+	Description   string   `json:"description"`
+	AuthorID      int      `json:"authorId"`
+	AuthorInfo    string   `json:"authorInfo"`
+	VideoList     []string `json:"videoList"`
+	CourseLink    string   `json:"courseLink"`
+	Roles         []*Role  `json:"roles"`
+	Additional    []string `json:"additional"`
+	Resources     []string `json:"resources"`
+	ProjectsCount int      `json:"projectCount"`
+}
+
 var (
 	users    = []*User{}
 	projects = []*Project{}
