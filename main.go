@@ -34,7 +34,7 @@ type Project struct {
 	About      string      `json:"about"`
 	Part       []*RoleUser `json:"party"`
 	TemplateID int         `json:"templateID"`
-	Jonins     int         `json:"joins"`
+	Joins      int         `json:"joins"`
 }
 
 //Role - структура, показывающая данные о ролях в проекте
@@ -114,6 +114,7 @@ func main() {
 	r.POST("/user/:id", func(c *gin.Context) {
 
 	})
+
 	r.POST("/projects/add", func(c *gin.Context) {
 		project := &Project{}
 
