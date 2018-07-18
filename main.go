@@ -116,7 +116,7 @@ func main() {
 		})
 	})
 
-	r.PUT("/templates", func(c *gin.Context) {
+	r.POST("/templates/add", func(c *gin.Context) {
 		template := &Template{}
 
 		log.Println(template)
