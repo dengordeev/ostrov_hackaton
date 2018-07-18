@@ -44,6 +44,7 @@ type Role struct {
 	About string `json:"about"`
 }
 
+//RoleUser - привязка пользователя к роли
 type RoleUser struct {
 	ID     int `json:"id"`
 	IDUser int `json:"iduser"`
