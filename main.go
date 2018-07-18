@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -134,6 +135,24 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{
 			"templates": templates,
 		})
+	})
+
+	r.GET("/template/:id", func(c *gin.Context) {
+		tid, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			c.JSON(http.StatusBadRequest, nil)
+			return
+		}
+		for _, t := range templates {
+			if t.ID == tid {
+				c.JSON(http.StatusOK, gin.H{
+					"template": t,
+				})
+				return
+			}
+		}
+
+		c.JSON(http.StatusOK, nil)
 	})
 	r.Run() // listen and serve on 0.0.0.0:8080
 }
