@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -69,7 +70,7 @@ func findTeamLeaders(users []*User) []*User {
 
 func main() {
 	r := gin.Default()
-
+	r.Use(cors.Default())
 	r.Static("/app", "./static")
 
 	r.GET("/projects", func(c *gin.Context) {
