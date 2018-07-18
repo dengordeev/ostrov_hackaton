@@ -122,7 +122,7 @@ func main() {
 		projects = append(projects, project)
 	})
 
-	r.POST("/projects/template/*id", func(c *gin.Context) {
+	r.GET("/projects/template/:id", func(c *gin.Context) {
 		id, err := strconv.Atoi(c.Param("id"))
 		result := []*Project{}
 		if err != nil {
@@ -141,7 +141,7 @@ func main() {
 		})
 	})
 
-	r.POST("/projects/category/:name", func(c *gin.Context) {
+	r.GET("/projects/category/:name", func(c *gin.Context) {
 		name := c.Param("name")
 		result := []*Project{}
 
