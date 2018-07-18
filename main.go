@@ -53,6 +53,7 @@ type Template struct {
 	VideoList     []string `json:"videoList"`
 	CourseLink    string   `json:"courseLink"`
 	Roles         []*Role  `json:"roles"`
+	Categories    []string `json:"categories"`
 	Additional    []string `json:"additional"`   //материалы
 	Resources     []string `json:"resources"`    //ресурсы
 	ProjectsCount int      `json:"projectCount"` //количество успешных проектов
@@ -94,23 +95,32 @@ func main() {
 	r.Use(cors.Default())
 	r.Static("/app", "./static")
 
-	r.GET("/projects", func(c *gin.Context) {
+	r.POST("/projects", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"projects": projects,
 		})
 	})
-	r.PUT("/projects", func(c *gin.Context) {
+
+	r.POST("/projects/add", func(c *gin.Context) {
 		project := &Project{}
+
+		log.Println(project)
 		err := c.BindJSON(&project)
 		if err != nil {
-			log.Println(err)
-			c.JSON(http.StatusBadRequest, nil)
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": err,
+			})
+			return
 		}
-		project.ID = len(projects) + 1
-		projects = append(projects, project)
+		if len(projects) == 0 {
+			project.ID = 1
+		} else {
+			project.ID = projects[len(projects)-1].ID + 1
+		}
 
-		c.JSON(http.StatusOK, nil)
+		projects = append(projects, project)
 	})
+
 	r.GET("/users", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"users": users,
