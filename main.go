@@ -9,12 +9,12 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
 const (
 	templateStore = "./db/template.json"
-	IDUSER        = 1
-	IDTEAMLEAD    = 2
 )
 
 //User - структура, содержащая данные о пользователе
