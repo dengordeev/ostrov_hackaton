@@ -105,7 +105,7 @@ func main() {
 			c.JSON(http.StatusBadRequest, nil)
 			return
 		}
-		user.ID = len(users) + 1
+		user.ID = users[len(users)-1].ID + 1
 		users = append(users, user)
 
 		c.JSON(http.StatusOK, nil)
@@ -122,11 +122,13 @@ func main() {
 		log.Println(template)
 		err := c.BindJSON(&template)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, nil)
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": err,
+			})
 			return
 		}
 
-		template.ID = len(templates) + 1
+		template.ID = templates[len(templates)-1].ID + 1
 
 		templates = append(templates, template)
 	})
