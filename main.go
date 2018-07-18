@@ -123,7 +123,6 @@ func main() {
 	})
 
 	r.POST("/projects/template/*id", func(c *gin.Context) {
-		act := c.Param("act")
 		id, err := strconv.Atoi(c.Param("id"))
 		result := []*Project{}
 		if err != nil {
@@ -131,17 +130,15 @@ func main() {
 			return
 		}
 
-		if act == "template" {
-			for _, p := range projects {
-				if p.TemplateID == id {
-					result = append(result, p)
-				}
+		for _, p := range projects {
+			if p.TemplateID == id {
+				result = append(result, p)
 			}
-
-			c.JSON(http.StatusOK, gin.H{
-				"projects": result,
-			})
 		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"projects": result,
+		})
 	})
 
 	r.POST("/projects/category/:name", func(c *gin.Context) {
