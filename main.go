@@ -28,12 +28,12 @@ type User struct {
 
 //Project - структура, содержащая данные о конкретном проекте
 type Project struct {
-	ID       int     `json:"id"`
-	IsOpen   bool    `json:"isopen"`
-	Name     string  `json:"name"`
-	About    string  `json:"about"`
-	Part     []*User `json:"party"`
-	Template `json:"template"`
+	ID         int    `json:"id"`
+	IsOpen     bool   `json:"isopen"`
+	Name       string `json:"name"`
+	About      string `json:"about"`
+	Part       []int  `json:"party"`
+	TemplateID int    `json:"templateID"`
 }
 
 //Role - структура, показывающая данные о ролях в проекте
@@ -94,6 +94,7 @@ func main() {
 	r.Use(cors.Default())
 	r.Static("/app", "./static")
 
+	//Projects
 	r.GET("/projects", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"projects": projects,
@@ -111,6 +112,51 @@ func main() {
 
 		c.JSON(http.StatusOK, nil)
 	})
+
+	r.POST("/projects/template/*id", func(c *gin.Context) {
+		act := c.Param("act")
+		id, err := strconv.Atoi(c.Param("id"))
+		result := []*Project{}
+		if err != nil {
+			c.JSON(http.StatusBadRequest, nil)
+			return
+		}
+
+		if act == "template" {
+			for _, p := range projects {
+				if p.TemplateID == id {
+					result = append(result, p)
+				}
+			}
+
+			c.JSON(http.StatusOK, gin.H{
+				"projects": result,
+			})
+		}
+	})
+
+	r.POST("/projects/category/:name", func(c *gin.Context) {
+		name := c.Param("name")
+		result := []*Project{}
+
+		for _, p := range projects {
+			for _, t := range templates {
+				if p.TemplateID == t.ID {
+					for _, cat := range t.Categories {
+						if cat == name {
+							result = append(result, p)
+						}
+					}
+				}
+			}
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"projects": result,
+		})
+
+	})
+
 	r.GET("/users", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"users": users,
