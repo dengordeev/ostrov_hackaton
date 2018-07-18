@@ -28,12 +28,13 @@ type User struct {
 
 //Project - структура, содержащая данные о конкретном проекте
 type Project struct {
-	ID         int    `json:"id"`
-	IsOpen     bool   `json:"isopen"`
-	Name       string `json:"name"`
-	About      string `json:"about"`
-	Part       []int  `json:"party"`
-	TemplateID int    `json:"templateID"`
+	ID         int         `json:"id"`
+	IsOpen     bool        `json:"isopen"`
+	Name       string      `json:"name"`
+	About      string      `json:"about"`
+	Part       []*RoleUser `json:"party"`
+	TemplateID int         `json:"templateID"`
+	Jonins     int         `json:"joins"`
 }
 
 //Role - структура, показывающая данные о ролях в проекте
@@ -41,6 +42,13 @@ type Role struct {
 	ID    int    `json:"id"`
 	Name  string `json:"name"`
 	About string `json:"about"`
+}
+
+type RoleUser struct {
+	ID     int `json:"id"`
+	IDUser int `json:"iduser"`
+	IDRole int `json:"idrole"`
+	Status int `json:"status"`
 }
 
 //Template - структура шаблона
@@ -163,6 +171,28 @@ func main() {
 
 	})
 
+	r.POST("/project/:id", func(c *gin.Context) {
+		tid, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			c.JSON(http.StatusBadRequest, nil)
+			return
+		}
+		for _, t := range projects {
+			if t.ID == tid {
+				c.JSON(http.StatusOK, gin.H{
+					"project": t,
+				})
+				return
+			}
+		}
+
+		c.JSON(http.StatusOK, nil)
+	})
+
+	r.POST("/project/join", func(c *gin.Context) {
+
+	})
+
 	r.GET("/users", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"users": users,
@@ -198,24 +228,6 @@ func main() {
 		}
 		user.ID = users[len(users)-1].ID + 1
 		users = append(users, user)
-
-		c.JSON(http.StatusOK, nil)
-	})
-
-	r.POST("/project/:id", func(c *gin.Context) {
-		tid, err := strconv.Atoi(c.Param("id"))
-		if err != nil {
-			c.JSON(http.StatusBadRequest, nil)
-			return
-		}
-		for _, t := range projects {
-			if t.ID == tid {
-				c.JSON(http.StatusOK, gin.H{
-					"project": t,
-				})
-				return
-			}
-		}
 
 		c.JSON(http.StatusOK, nil)
 	})
