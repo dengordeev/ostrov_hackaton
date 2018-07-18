@@ -171,7 +171,26 @@ func main() {
 			"users": users,
 		})
 	})
-	r.PUT("/users", func(c *gin.Context) {
+
+	r.POST("/user/:id", func(c *gin.Context) {
+		tid, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			c.JSON(http.StatusBadRequest, nil)
+			return
+		}
+		for _, t := range users {
+			if t.ID == tid {
+				c.JSON(http.StatusOK, gin.H{
+					"user": t,
+				})
+				return
+			}
+		}
+
+		c.JSON(http.StatusOK, nil)
+	})
+
+	r.POST("/users", func(c *gin.Context) {
 		user := &User{}
 		err := c.BindJSON(&user)
 		log.Println(user)
@@ -185,6 +204,25 @@ func main() {
 
 		c.JSON(http.StatusOK, nil)
 	})
+
+	r.POST("/project/:id", func(c *gin.Context) {
+		tid, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			c.JSON(http.StatusBadRequest, nil)
+			return
+		}
+		for _, t := range projects {
+			if t.ID == tid {
+				c.JSON(http.StatusOK, gin.H{
+					"project": t,
+				})
+				return
+			}
+		}
+
+		c.JSON(http.StatusOK, nil)
+	})
+
 	r.GET("/teamleaders", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"teamleaders": findTeamLeaders(users),
