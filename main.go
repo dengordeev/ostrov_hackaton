@@ -13,6 +13,8 @@ import (
 
 const (
 	templateStore = "./db/template.json"
+	IDUSER        = 1
+	IDTEAMLEAD    = 2
 )
 
 //User - структура, содержащая данные о пользователе
@@ -208,7 +210,10 @@ func main() {
 
 		for _, p := range projects {
 			if p.ID == id {
-				ru := &RoleUser{}
+				ru := &RoleUser{
+					IDRole: idRole,
+					IDUser: IDUSER,
+				}
 				p.Part = append(p.Part, ru)
 
 				return
