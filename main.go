@@ -50,8 +50,9 @@ type Template struct {
 }
 
 var (
-	users    = []*User{}
-	projects = []*Project{}
+	users     = []*User{}
+	projects  = []*Project{}
+	templates = []*Template{}
 )
 
 func findTeamLeaders(users []*User) []*User {
@@ -70,8 +71,6 @@ func main() {
 
 	r.Static("/app", "./static")
 
-	projects = append(projects, p1)
-	users = append(users, u1, u2)
 	r.GET("/projects", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"projects": projects,
@@ -114,14 +113,22 @@ func main() {
 		})
 	})
 
-	r.PUT("/teplates", func(c *gin.Context) {
+	r.PUT("/templates", func(c *gin.Context) {
 		template := &Template{}
 		log.Println(template)
 		err := c.BindJSON(&template)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, nil)
+			return
 		}
+		template.ID = len(templates) + 1
+		templates = append(templates, template)
+	})
 
+	r.POST("/templates", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"templates": templates,
+		})
 	})
 	r.Run() // listen and serve on 0.0.0.0:8080
 }
