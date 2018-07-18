@@ -27,6 +27,14 @@ type Project struct {
 	Part   []*User `json:"party"`
 }
 
+//Role - структура, показывающая данные о ролях в проекте
+type Role struct {
+	ID    int    `json:"id"`
+	Name  string `json:"name"`
+	About string `json:"about"`
+}
+
+//Template - структура шаблона
 type Template struct {
 	ID            int      `json:"id"`
 	Name          string   `json:"name"`
@@ -61,38 +69,7 @@ func main() {
 	r := gin.Default()
 
 	r.Static("/app", "./static")
-	/*r.POST("/teamleaders", func(c *gin.Context) {
 
-	})
-	r.POST("/users", func(c *gin.Context) {
-
-	})
-	*/
-	u1 := &User{
-		1,
-		"dengordeev",
-		"Гордеев",
-		"Денис",
-		"",
-		[]*Project{},
-		[]*Project{},
-	}
-	u2 := &User{
-		1,
-		"user",
-		"User",
-		"User",
-		"I'm user",
-		[]*Project{},
-		[]*Project{},
-	}
-	p1 := &Project{
-		1,
-		true,
-		"Первый проект",
-		"Он лучший",
-		[]*User{},
-	}
 	projects = append(projects, p1)
 	users = append(users, u1, u2)
 	r.GET("/projects", func(c *gin.Context) {
@@ -135,6 +112,16 @@ func main() {
 		c.JSON(200, gin.H{
 			"teamleaders": findTeamLeaders(users),
 		})
+	})
+
+	r.PUT("/teplates", func(c *gin.Context) {
+		template := &Template{}
+		log.Println(template)
+		err := c.BindJSON(&template)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, nil)
+		}
+
 	})
 	r.Run() // listen and serve on 0.0.0.0:8080
 }
