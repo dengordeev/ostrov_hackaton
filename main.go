@@ -115,6 +115,7 @@ func findByIdRole(id int) *Role {
 	return nil
 }
 
+//
 func findByIdProjects(id int) *Project {
 	for _, p := range projects {
 		if p.ID == id {
@@ -148,7 +149,23 @@ func main() {
 	})
 
 	r.POST("/user/:id", func(c *gin.Context) {
+		user := &User{}
+		err := c.BindJSON(&user)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": err,
+			})
+			return
+		}
+		if len(users) == 0 {
+			user.ID = 1
+		} else {
+			user.ID = users[len(users)-1].ID + 1
+		}
 
+		users = append(users, user)
+
+		c.JSON(200, nil)
 	})
 
 	r.POST("/projects/add", func(c *gin.Context) {
