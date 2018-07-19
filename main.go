@@ -48,9 +48,11 @@ type Role struct {
 
 //RoleUser - привязка пользователя к роли
 type RoleUser struct {
-	ID     int `json:"id"`
-	IDUser int `json:"iduser"`
-	IDRole int `json:"idrole"`
+	ID int `json:"id"`
+
+	User `json:"iduser"`
+	Role `json:"role"`
+
 	Status int `json:"status"`
 }
 
@@ -89,8 +91,38 @@ var (
 	projects   = []*Project{}
 	templates  = []*Template{}
 	rolesUsers = []*RoleUser{}
+	roles      = []*Role{}
 )
 
+func findByIdUser(id int) *User {
+	for _, u := range users {
+		if u.ID == id {
+			return u
+		}
+	}
+
+	return nil
+}
+
+func findByIdRole(id int) *Role {
+	for _, r := range roles {
+		if r.ID == id {
+			return r
+		}
+	}
+
+	return nil
+}
+
+func findByIdProjects(id int) *Project {
+	for _, p := range projects {
+		if p.ID == id {
+			return p
+		}
+	}
+
+	return nil
+}
 func findTeamLeaders(users []*User) []*User {
 	result := []*User{}
 	for _, u := range users {
@@ -194,6 +226,8 @@ func main() {
 	})
 
 	r.POST("/project/:id/join/*idRole", func(c *gin.Context) {
+		user := &User{}
+		c.BindJSON(&user)
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
 			c.JSON(http.StatusBadRequest, nil)
@@ -204,13 +238,15 @@ func main() {
 			c.JSON(http.StatusBadRequest, nil)
 			return
 		}
-
+		user = findByIdUser(user.ID)
+		role := findByIdRole(idRole)
 		for _, p := range projects {
 			if p.ID == id {
 				ru := &RoleUser{
-					IDRole: idRole,
-					IDUser: IDUSER,
-					ID:     len(rolesUsers) + 1,
+					len(rolesUsers) + 1,
+					*user,
+					*role,
+					1,
 				}
 				p.Part = append(p.Part, ru)
 
