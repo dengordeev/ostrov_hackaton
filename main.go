@@ -148,7 +148,7 @@ func main() {
 		})
 	})
 
-	r.POST("/user/:id", func(c *gin.Context) {
+	r.POST("/add/user", func(c *gin.Context) {
 		user := &User{}
 		err := c.BindJSON(&user)
 		if err != nil {
