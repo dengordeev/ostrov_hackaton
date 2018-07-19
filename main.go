@@ -32,9 +32,9 @@ type User struct {
 type Project struct {
 	ID         int         `json:"id"`
 	IsOpen     bool        `json:"isopen"`
-	Name       string      `json:"name"`
-	About      string      `json:"about"`
-	Part       []*RoleUser `json:"party"`
+	Name       string      `json:"name", gorm:"default:'defaultproject'"`
+	About      string      `json:"about", gorm:"default:'defaultproject'"`
+	Part       []*RoleUser `json:"party", gorm:"default:'defaultuser'"`
 	TemplateID int         `json:"templateID"`
 	Joins      int         `json:"joins"`
 }
