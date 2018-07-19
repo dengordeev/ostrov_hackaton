@@ -19,13 +19,14 @@ const (
 
 //User - структура, содержащая данные о пользователе
 type User struct {
-	ID         int        `json:"id"`
-	Username   string     `json:"username"`
-	Lastname   string     `json:"lastname"`
-	Firstname  string     `json:"firsname"`
-	About      string     `json:"about"`
-	MyProjects []*Project `json:"myprojects"`
-	Projects   []*Project `json:"projects"`
+	ID           int        `json:"id"`
+	Username     string     `json:"username"`
+	Lastname     string     `json:"lastname"`
+	Firstname    string     `json:"firsname"`
+	About        string     `json:"about"`
+	Competention string     `json:"conpetention"`
+	MyProjects   []*Project `json:"myprojects"`
+	Projects     []*Project `json:"projects"`
 }
 
 //Project - структура, содержащая данные о конкретном проекте
