@@ -20,10 +20,10 @@ const (
 //User - структура, содержащая данные о пользователе
 type User struct {
 	ID         int        `json:"id"`
-	Username   string     `json:"username"`
-	Lastname   string     `json:"lastname"`
-	Firstname  string     `json:"firsname"`
-	About      string     `json:"about"`
+	Username   string     `json:"username", gorm:"default:'defaultuser'"`
+	Lastname   string     `json:"lastname", gorm:"default:'defaultuser'"`
+	Firstname  string     `json:"firsname",gorm:"default:'defaultuser'"`
+	About      string     `json:"about", gorm:"default:'ничего нет...'"`
 	MyProjects []*Project `json:"myprojects"`
 	Projects   []*Project `json:"projects"`
 }
