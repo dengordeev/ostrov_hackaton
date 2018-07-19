@@ -247,7 +247,10 @@ func main() {
 			for _, r := range p.Part {
 				for _, ur := range u.Roles {
 					if ur == r.Name {
-						result = append(result, p)
+						np := p
+						np.Part = []*RoleUser{}
+						np.Part = append(np.Part, r)
+						result = append(result, np)
 					}
 				}
 			}
