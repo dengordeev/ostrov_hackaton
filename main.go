@@ -25,6 +25,7 @@ type User struct {
 	Firstname    string     `json:"firsname"`
 	About        string     `json:"about"`
 	Competention string     `json:"conpetention"`
+	Roles        []string   `json:"roles"`
 	MyProjects   []*Project `json:"myprojects"`
 	Projects     []*Project `json:"projects"`
 }
@@ -227,6 +228,34 @@ func main() {
 			"projects": result,
 		})
 
+	})
+	r.POST("/recomendation/:id", func(c *gin.Context) {
+		id, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			c.JSON(http.StatusBadRequest, nil)
+			return
+		}
+
+		u := findByIdUser(id)
+
+		if u == nil {
+			c.JSON(http.StatusBadRequest, nil)
+			return
+		}
+		result := []*Project{}
+		for _, p := range projects {
+			for _, r := range p.Part {
+				for _, ur := range u.Roles {
+					if ur == r.Name {
+						result = append(result, p)
+					}
+				}
+			}
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"projects": result,
+		})
 	})
 
 	r.POST("/project/:id", func(c *gin.Context) {
