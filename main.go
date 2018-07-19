@@ -142,6 +142,32 @@ func main() {
 	r.Use(cors.Default())
 	r.Static("/app", "./static")
 
+	user1 := &User{
+		ID:           1,
+		Username:     "TinyLionet",
+		Lastname:     "Крохалев",
+		Firstname:    "Илья",
+		About:        "Закончил технический университет",
+		Competention: "",
+		Roles:        []string{"Инженер", "Программист", "Метролог"},
+		MyProjects:   []*Project{},
+		Projects:     []*Project{},
+	}
+	users = append(users, user1)
+
+	user2 := &User{
+		ID:           2,
+		Username:     "maslova",
+		Lastname:     "Маслова",
+		Firstname:    "Александра",
+		About:        "Сфера менеджмента",
+		Competention: "",
+		Roles:        []string{"Старший менеджер", "Директор", "Администратор"},
+		MyProjects:   []*Project{},
+		Projects:     []*Project{},
+	}
+	users = append(users, user2)
+
 	//Projects
 	r.GET("/projects", func(c *gin.Context) {
 		c.JSON(200, gin.H{
@@ -399,5 +425,6 @@ func main() {
 
 		c.JSON(http.StatusOK, nil)
 	})
+
 	r.Run() // listen and serve on 0.0.0.0:8080
 }
